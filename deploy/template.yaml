@@ -42,7 +42,7 @@ Parameters:
     ConstraintDescription: Must be a CIDR range a.b.c.d/x.
   SSHKp:
     Type: String
-    Default: cicd-keypair
+    Default: devops-demo
     Description: KP to do SSH
 Mappings:
   VPCRange:
@@ -305,7 +305,8 @@ Resources:
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/AmazonRekognitionReadOnlyAccess'
         - 'arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess'
-      RoleName: EC2-cicd-techtalk
+        - 'arn:aws:iam::aws:policy/AmazonSSMFullAccess'
+      RoleName: EC2-cicd-demo
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -339,18 +340,11 @@ Resources:
       UserData: !Base64 >
         #!/bin/bash -xe
         sudo yum update -y aws-cfn-bootstrap
-        # CodeDeploy Agent Install
-        sudo yum install -y ruby
-        sudo wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install
-        sudo chmod +x ./install
-        sudo ./install auto
-        # Node.JS Install
-        sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm 
-        sudo yum install -y nodejs npm
+ 
       KeyName: !Ref SSHKp
       Tags:
         - Key: Name
-          Value: cicd-techtalk
+          Value: cicd-demo
   EC2Bastion:
     Type: 'AWS::EC2::Instance'
     Properties:
@@ -378,7 +372,7 @@ Resources:
     DependsOn:
       - EC2A
     Properties:
-      Name: cicd-techtalk-tg
+      Name: cicd-demo-tg
       VpcId: !Ref VPC
       TargetType: instance
       Port: 80
@@ -400,7 +394,7 @@ Resources:
       Subnets:
         - !Ref SubnetPubA
         - !Ref SubnetPubB
-      Name: cicd-techtalk-alb
+      Name: cicd-demo-alb
       SecurityGroups:
         - !Ref SecurityGroupHTTPALB
   ALBListener:
@@ -415,7 +409,7 @@ Resources:
   ConfParameter:
     Type: 'AWS::SSM::Parameter'
     Properties:
-      Name: /cicd-techtalk/aws/region
+      Name: /cicd-demo/aws/region
       Type: String
       Value: us-east-1
   CodeBuildRole:
@@ -431,7 +425,7 @@ Resources:
             Action:
               - 'sts:AssumeRole'
       Path: /
-      RoleName: CodeBuild-cicd-techtalk
+      RoleName: CodeBuild-cicd-demo
       Policies:
         - PolicyName: cicdCodeBuildAccess
           PolicyDocument:
@@ -472,7 +466,7 @@ Resources:
       Path: /
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole'
-      RoleName: CodeDeploy-cicd-techtalk
+      RoleName: CodeDeploy-cicd-demo
 Outputs:
   VPC:
     Description: VPC id
