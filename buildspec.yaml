@@ -1,7 +1,7 @@
 version: 0.2
 env:
   parameter-store:
-    AWS_REGION: /cicd-techtalk/aws/region
+    AWS_REGION: /cicd-demo/aws/region
 
 phases:
   install:
