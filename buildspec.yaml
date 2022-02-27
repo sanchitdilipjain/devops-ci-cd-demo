@@ -18,4 +18,4 @@ artifacts:
     - 'app/**/*'
     - 'scripts/**'
     - appspec.yml
-  name: cicd-techtalk-$(date +%Y-%m-%d-%H-%m-%S)
+  name: cicd-demo-$(date +%Y-%m-%d-%H-%m-%S)
