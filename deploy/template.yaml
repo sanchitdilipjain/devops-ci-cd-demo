@@ -417,6 +417,22 @@ Resources:
       Name: /cicd-demo/aws/region
       Type: String
       Value: us-east-1
+  CodePipelineRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AdministratorAccess'
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - codepipeline.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      RoleName: CodePipeline-cicd-demo
   CodeBuildRole:
     Type: 'AWS::IAM::Role'
     Properties:
