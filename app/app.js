@@ -1,5 +1,5 @@
-//const configFile = "./config/PLEASE-FIX-ME.json";
-const configFile = "./config/config.json";
+const configFile = "./config/PLEASE-FIX-ME.json";
+//const configFile = "./config/config.json";
 const port = 80
 const http = require("http");
 const fs = require('fs');
